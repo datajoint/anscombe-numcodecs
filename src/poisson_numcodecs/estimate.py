@@ -1,6 +1,5 @@
 import numpy as np
 from sklearn.linear_model import HuberRegressor as Regressor
-import imageio as io
 
 
 def _longest_run(bool_array: np.ndarray) -> slice:
@@ -78,7 +77,12 @@ def compute_sensitivity(movie: np.array, count_weight_gamma: float=0.2) -> dict:
         zero_level=zero_level,
     )
 
-def make_anscombe_lookup(sensitivity: float, input_max: int=0x7fff, beta: float=0.5):
+def make_anscombe_lookup(
+          sensitivity: float, 
+          input_max: int=0x7fff, 
+          beta: float=0.5, 
+          output_type='uint8'
+          ):
 	"""
 	Compute the Anscombe lookup table.
 	The lookup converts a linear grayscale image into a uniform variance image. 
@@ -86,30 +90,20 @@ def make_anscombe_lookup(sensitivity: float, input_max: int=0x7fff, beta: float=
     :param input_max: the maximum value in the input
 	:param beta: the grayscale quantization step expressed in units of noise std dev
 	"""
-	# produce anscombe lookup_table
 	xx = np.r_[:input_max + 1] / sensitivity
-	lookup = np.uint8(
-        2.0 / beta * (np.sqrt(np.maximum(0, xx) + 3/8) - np.sqrt(3/8)))
-	return lookup
+	lookup_table = 2.0 / beta * (np.sqrt(np.maximum(0, xx) + 3/8) - np.sqrt(3/8))
+	return lookup_table.astype(output_type)
 
 
-def make_inverse_lookup(lookup):
-    _, inverse = np.unique(lookup, return_index=True)
-    inverse += (np.r_[:inverse.size] / inverse.size * (inverse[-1] - inverse[-2])/2).astype(np.int16)
+def make_inverse_lookup(lookup_table: np.ndarray, output_type='int16') -> np.ndarray:
+    """Compute the inverse lookup table for a monotonic forward lookup table."""
+    _, inverse = np.unique(lookup_table, return_index=True)
+    inverse += (np.r_[:inverse.size] / 
+                inverse.size * (inverse[-1] - inverse[-2])/2
+                ).astype(output_type)
     return inverse 
 
 
-def lookup(movie, LUT):
-    """
-    Apply lookup table LUT to input movie
-    """
-    return LUT[np.maximum(0, np.minimum(movie, LUT.size-1))]
-
-
-def save_movie(movie, path, scale=1, format='gif'):
-    if format == "gif":
-        with io.get_writer(path, mode='I', duration=.01, loop=False) as f:
-            for frame in movie:
-                f.append_data(scale * frame)
-    else:
-        raise NotImplementedError(f"Format {format} is not implemented")
+def lookup(movie: np.ndarray, lookup_table: np.ndarray) -> np.ndarray:
+    """Apply lookup table to movie"""
+    return lookup_table[np.maximum(0, np.minimum(movie, lookup_table.size-1))]
