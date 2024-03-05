@@ -18,13 +18,15 @@ def make_anscombe_lookup(
     :param input_max: the maximum value in the input
     :param beta: the grayscale quantization step expressed in units of noise std dev
     """
-    xx = (np.r_[:input_max + 1] - zero_level) / sensitivity
+    xx = (np.r_[:input_max + 1] - zero_level) / sensitivity  # input expressed in photon rates
     zero_slope = 1 / beta / np.sqrt(3/8)  # slope for negative values
-    offset = -zero_level * zero_slope
-    lookup_table = np.floor(0.75 + offset +
+    offset = zero_level * zero_slope / sensitivity
+    lookup_table = np.round(offset +
           (xx < 0) * (xx * zero_slope) +
           (xx >= 0) * (2.0 / beta * (np.sqrt(np.maximum(0, xx) + 3/8) - np.sqrt(3/8))))
-    return lookup_table.astype(output_type)
+    lookup = lookup_table.astype(output_type)
+    assert np.diff(lookup_table).min() >= 0, "non-monotonic lookup generated"
+    return lookup
 
 
 def make_inverse_lookup(lookup_table: np.ndarray, output_type='int16') -> np.ndarray:
@@ -69,7 +71,8 @@ class PoissonCodec(Codec):
     def encode(self, buf: np.ndarray) -> np.ndarray:
         lookup_table = make_anscombe_lookup(
             self.photon_sensitivity, 
-            output_type=self.encoded_dtype
+            output_type=self.encoded_dtype,
+            zero_level=self.zero_level,
         )
         encoded = lookup(buf, lookup_table)
         shape = [encoded.ndim] + list(encoded.shape)
@@ -79,7 +82,8 @@ class PoissonCodec(Codec):
     def decode(self, buf: bytes, out=None) -> np.ndarray:
         lookup_table = make_anscombe_lookup(
             self.photon_sensitivity, 
-            output_type=self.encoded_dtype
+            output_type=self.encoded_dtype,
+            zero_level=self.zero_level,
         )
         inverse_table = make_inverse_lookup(
             lookup_table,
