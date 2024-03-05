@@ -1,4 +1,3 @@
-from .poisson import Poisson
+from .codec import PoissonCodec
 
-__all__ = ["Poisson"]
-
+__all__ = ["PoissonCodec"]
