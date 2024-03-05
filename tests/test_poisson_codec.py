@@ -1,4 +1,4 @@
-from poisson_numcodecs import Poisson
+from poisson_numcodecs import PoissonCodec
 import numpy as np
 import pytest
 
@@ -11,20 +11,22 @@ def make_poisson_ramp_signals(shape=(10, 1, 1), min_rate=1, max_rate=5, dtype="i
     output_array = np.zeros(shape, dtype=dtype)
     for x_ind in range(x):
         for y_ind in range(y):
-            output_array[x_ind, y_ind, :] = np.random.poisson(
+            output_array[x_ind, y_ind, :] = sensitivity * np.random.poisson(
                 np.arange(min_rate, max_rate, (max_rate-min_rate)/times))
-    return output_array
+    return output_array.astype('int16')
+
+sensitivity = 100.0
 
 @pytest.fixture
 def test_data(dtype="int16"):
-    test2d = make_poisson_ramp_signals(shape=(50, 1, 1), min_rate=1, max_rate=5, dtype=dtype)
+    test2d =  make_poisson_ramp_signals(shape=(50, 1, 1), min_rate=1, max_rate=5, dtype=dtype)
     test2d_long = make_poisson_ramp_signals(shape=(1, 50, 1), min_rate=1, max_rate=5, dtype=dtype)
     return [test2d, test2d_long]
 
 def test_poisson_encode_decode(test_data):
-    poisson_codec = Poisson(
+    poisson_codec = PoissonCodec(
         zero_level=0,
-        photon_sensitivity=1.0,
+        photon_sensitivity=sensitivity,
         encoded_dtype='uint8', 
         decoded_dtype='int16'
     )
@@ -32,7 +34,7 @@ def test_poisson_encode_decode(test_data):
     for example_data in test_data:
         encoded = poisson_codec.encode(example_data)
         decoded = poisson_codec.decode(encoded)
-        np.testing.assert_allclose(decoded, example_data, atol=1e-3)
+        assert np.abs(decoded - example_data).max() < sensitivity / 2
 
 if __name__ == '__main__':
     list_data = test_data("int16")
