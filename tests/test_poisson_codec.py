@@ -1,4 +1,3 @@
-from numpy._typing._generic_alias import NDArray
 from poisson_numcodecs import PoissonCodec
 import numpy as np
 import pytest
