@@ -42,7 +42,7 @@ def lookup(movie: np.ndarray, lookup_table: np.ndarray) -> np.ndarray:
     return lookup_table[np.maximum(0, np.minimum(movie, lookup_table.size-1))]
 
 
-class PoissonCodec(Codec):
+class AnscombeCodec(Codec):
     """Codec for 3-dimensional Filter. The codec assumes that input data are of shape:
     (time, x, y).
 
@@ -95,4 +95,4 @@ class PoissonCodec(Codec):
         return lookup(decoded, inverse_table).astype(self.decoded_dtype)
 
 
-numcodecs.register_codec(PoissonCodec)
+numcodecs.register_codec(AnscombeCodec)

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "anscombe_numcodecs"
-version = "0.1.1"
+version = "0.1.2"
 authors = [
   { name = "Jerome Lecoq", email = "jeromel@alleninstitute.org" },
   { name = "Dimitri Yatsenko", email = "dimitr@datajoint.com" },
