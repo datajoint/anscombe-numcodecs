@@ -3,20 +3,31 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "poisson_numcodecs"
-version = "0.1.0"
+name = "anscombe_numcodecs"
+version = "0.1.1"
 authors = [
-  { name="Jerome Lecoq", email="jeromel@alleninstitute.org" },
+  { name = "Jerome Lecoq", email = "jeromel@alleninstitute.org" },
+  { name = "Dimitri Yatsenko", email = "dimitr@datajoint.com" },
 ]
-description = "Numcodecs implementation of a poisson noise calibration."
+maintainers = [
+  { name = "Dimitri Yatsenko", email = "dimitr@datajoint.com" },
+]
+license = { file = "LICENSE" }
+description = "Numcodecs implementation for compressing photon-limited movies."
 readme = "README.md"
 requires-python = ">=3.8"
+keywords = ["video compression", "numcodecs", "zarr", "compression algorithms", "multimedia", "multiphoton microscopy"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Software Development :: Libraries",
 ]
 
+# Dependencies will be managed via requirements.txt
+
 [project.urls]
-Homepage = "https://github.com/AllenNeuralDynamics/poisson-numcodecs"
-Issues = "https://github.com/AllenNeuralDynamics/poisson-numcodecs/issues"
+Homepage = "https://github.com/datajoint/anscombe-numcodecs"
+Source = "https://github.com/datajoint/anscombe-numcodecs"
+Issues = "https://github.com/datajoint/anscombe-numcodecs/issues"

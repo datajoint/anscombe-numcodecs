@@ -1,7 +1,14 @@
-numpy
-numcodecs
-zarr
-matplotlib
+numpy>=2.0 
+numcodecs>=0.1
+zarr>=2.18
 scipy
 scikit-learn
 imageio
+matplotlib
+
+# Developmenet dependencies 
+pytest>=7.0
+pytest-cov
+black
+flake8
+mypy
