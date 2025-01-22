@@ -25,6 +25,12 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
 ]
 
+dependencies = [
+    "numpy>=2.0",
+    "numcodecs>=0.1",
+    "scikit-learn",
+]
+
 # Dependencies will be managed via requirements.txt
 
 [project.urls]
