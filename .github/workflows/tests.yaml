@@ -16,17 +16,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest"]
+        os: ["ubuntu-latest"]
+
     steps:
       - uses: actions/checkout@v2
       - uses: s-weigand/setup-conda@v1
-        with:
-          python-version: 3.9
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pytest
           pip install .
+
       - name: Test with pytest 
         run: |
           pytest -v

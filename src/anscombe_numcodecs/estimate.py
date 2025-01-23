@@ -17,12 +17,12 @@ def _longest_run(bool_array: np.ndarray) -> slice:
     return slice(on[i], off[i])
 
 
-def compute_sensitivity(movie: np.array, count_weight_gamma: float=0.2) -> dict:
+def compute_sensitivity(movie: np.array, count_weight_gamma: float = 0.2) -> dict:
     """Calculate photon sensitivity
 
     Args:
         movie (np.array):  A movie in the format (time, height, width).
-        count_weight_gamma: 0.00001=weigh each intensity level equally, 
+        count_weight_gamma: 0.00001=weigh each intensity level equally,
             1.0=weigh each intensity in proportion to pixel counts.
 
     Returns:
@@ -42,12 +42,14 @@ def compute_sensitivity(movie: np.array, count_weight_gamma: float=0.2) -> dict:
     intensity = (movie[:-1, :, :] + movie[1:, :, :] + 1) // 2
     difference = movie[:-1, :, :].astype(np.float32) - movie[1:, :, :]
 
-    select = intensity > 0   # discard non-positive values
+    select = intensity > 0  # discard non-positive values
     intensity = intensity[select]
     difference = difference[select]
 
     counts = np.bincount(intensity.flatten())
-    bins = _longest_run(counts > 0.01 * counts.mean())  # consider only bins with at least 1% of mean counts 
+    bins = _longest_run(
+        counts > 0.01 * counts.mean()
+    )  # consider only bins with at least 1% of mean counts
     bins = slice(max(bins.stop * 3 // 100, bins.start), bins.stop)
     assert (
         bins.stop - bins.start > 100
@@ -63,9 +65,9 @@ def compute_sensitivity(movie: np.array, count_weight_gamma: float=0.2) -> dict:
         / counts
     )
     model = Regressor()
-    model.fit(np.c_[bins], variance, counts ** count_weight_gamma)
+    model.fit(np.c_[bins], variance, counts**count_weight_gamma)
     sensitivity = model.coef_[0]
-    zero_level = - model.intercept_ / model.coef_[0]
+    zero_level = -model.intercept_ / model.coef_[0]
 
     return dict(
         model=model,

@@ -1,7 +1,9 @@
-numpy
-numcodecs
-zarr
-matplotlib
+zarr>=2.18
 scipy
-scikit-learn
 imageio
+matplotlib
+pytest>=7.0
+pytest-cov
+black
+flake8
+mypy

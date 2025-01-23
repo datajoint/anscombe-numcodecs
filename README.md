@@ -1,10 +1,10 @@
-[![PyPI version](https://badge.fury.io/py/poisson-numcodecs.svg)](https://badge.fury.io/py/poisson-numcodecs) ![tests](https://github.com/datajoint/poisson-numcodecs/actions/workflows/tests.yaml/badge.svg)
+[![PyPI version](https://badge.fury.io/py/anscombe-numcodecs.svg)](https://badge.fury.io/py/anscombe-numcodecs) ![tests](https://github.com/datajoint/anscombe-numcodecs/actions/workflows/tests.yaml/badge.svg)
 
-# Poisson - numcodecs implementation
+# Anscombe numcodecs
 
 This codec is designed for compressing movies with Poisson noise, which are produced by photon-limited modalities such multiphoton microscopy, radiography, and astronomy.
 
-The codec assumes that the video is linearly encoded with a potential offset (`zero_level`) and that the `photon_sensitivity` (the average increase in intensity per photon) is known or can be accurately estimated from the data.
+The codec assumes that the video is linearly encoded with a potential offset (`zero_level`) and that the `photon_sensitivity` (the average increase in intensity per photon) is either already known or can be accurately estimated from the data.
 
 The codec re-quantizes the grayscale efficiently with a square-root-like transformation to equalize the noise variance across the grayscale levels: the [Anscombe Transform](https://en.wikipedia.org/wiki/Anscombe_transform).
 This results in a smaller number of unique grayscale levels and significant improvements in the compressibility of the data without sacrificing signal accuracy.
@@ -20,16 +20,16 @@ The codec is used in Zarr as a filter prior to compression.
 Install via `pip`:
 
 ```
-pip install poisson-numcodecs
+pip install anscombe-numcodecs
 ```
 
 ### Developer installation
 
 ```
-conda create -n poisson_numcodecs python=3.xx
-conda activate poisson_numcodecs
-git clone https://github.com/AllenNeuralDynamics/poisson-numcodecs.git
-cd poisson-numcodecs
+conda create -n anscombe_numcodecs python=3.xx
+conda activate anscombe_numcodecs
+git clone https://github.com/datajoint/anscombe-numcodecs.git
+cd anscombe-numcodecs
 pip install -r requirements.txt
 pip install -e .
 ```
