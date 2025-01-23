@@ -30,6 +30,4 @@ jobs:
 
       - name: Test with pytest 
         run: |
-          source $HOME/miniforge/bin/activate
-          conda activate test-env
           pytest -v
