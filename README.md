@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/poisson-numcodecs.svg)](https://badge.fury.io/py/poisson-numcodecs) ![tests](https://github.com/datajoint/poisson-numcodecs/actions/workflows/tests.yaml/badge.svg)
+[![PyPI version](https://badge.fury.io/py/anscombe-numcodecs.svg)](https://badge.fury.io/py/anscombe-numcodecs) ![tests](https://github.com/datajoint/anscombe-numcodecs/actions/workflows/tests.yaml/badge.svg)
 
 # Anscombe numcodecs
 
@@ -20,14 +20,14 @@ The codec is used in Zarr as a filter prior to compression.
 Install via `pip`:
 
 ```
-pip install poisson-numcodecs
+pip install anscombe-numcodecs
 ```
 
 ### Developer installation
 
 ```
-conda create -n poisson_numcodecs python=3.xx
-conda activate poisson_numcodecs
+conda create -n anscombe_numcodecs python=3.xx
+conda activate anscombe_numcodecs
 git clone https://github.com/datajoint/anscombe-numcodecs.git
 cd anscombe-numcodecs
 pip install -r requirements.txt
