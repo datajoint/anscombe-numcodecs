@@ -20,9 +20,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: s-weigand/setup-conda@v1
+
+      # Conditional Conda setup for Ubuntu
+      - name: Set up Conda (Ubuntu only)
+        if: runner.os == 'Linux'
+        uses: s-weigand/setup-conda@v1
         with:
           python-version: 3.9
+
 
       # Use Miniforge for macOS
       - name: Set up Miniforge (macOS only)
