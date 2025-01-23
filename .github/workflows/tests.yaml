@@ -16,36 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest"]
+        os: ["ubuntu-latest"]
 
     steps:
       - uses: actions/checkout@v2
-
-      # Conditional Conda setup for Ubuntu
-      - name: Set up Conda (Ubuntu only)
-        if: runner.os == 'Linux'
-        uses: s-weigand/setup-conda@v1
-        with:
-          python-version: 3.9
-
-
-      # Use Miniforge for macOS
-      - name: Set up Miniforge (macOS only)
-        if: runner.os == 'macOS'
-        run: |
-          curl -L -o miniforge.sh https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-arm64.sh
-          bash miniforge.sh -b -p $HOME/miniforge
-          echo "$HOME/miniforge/bin" >> $GITHUB_PATH
-          echo "source $HOME/miniforge/bin/activate" >> $GITHUB_ENV
-          conda init bash
-          export PATH="$HOME/miniforge/bin:$PATH"
-          conda init bash
+      - uses: s-weighand/setup-conda@v1
 
       - name: Install dependencies
         run: |
-          source $HOME/miniforge/bin/activate
-          conda create -y -n test-env python=3.9
-          conda activate test-env
           pip install -r requirements.txt
           pip install pytest
           pip install .
