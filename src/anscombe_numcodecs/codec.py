@@ -76,7 +76,7 @@ class AnscombeCodec(Codec):
         )
         encoded = lookup(buf, lookup_table)
         shape = [encoded.ndim] + list(encoded.shape)
-        shape = np.array(shape, dtype='uint8')
+        shape = np.array(shape, dtype='uint32')
         return shape.tobytes() + encoded.astype(self.encoded_dtype).tobytes()
 
     def decode(self, buf: bytes, out=None) -> np.ndarray:
@@ -89,9 +89,9 @@ class AnscombeCodec(Codec):
             lookup_table,
             output_type=self.decoded_dtype
         )
-        ndims = int(buf[0])
-        shape = [int(_) for _ in buf[1:ndims+1]]
-        decoded = np.frombuffer(buf[ndims+1:], dtype=self.encoded_dtype).reshape(shape)
+		ndims = np.frombuffer(buff[:4], 'uint32')[0]
+		shape = np.frombuffer(buff[4:4*(ndims+1)], 'uint32')
+        decoded = np.frombuffer(buf[(ndims+1)*4:], dtype=self.encoded_dtype).reshape(shape)
         return lookup(decoded, inverse_table).astype(self.decoded_dtype)
 
 
