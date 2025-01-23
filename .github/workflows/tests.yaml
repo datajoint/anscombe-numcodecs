@@ -17,16 +17,31 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
+
     steps:
       - uses: actions/checkout@v2
       - uses: s-weigand/setup-conda@v1
         with:
           python-version: 3.9
+
+      # Use Miniforge for macOS
+      - name: Set up Miniforge (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          curl -L -o miniforge.sh https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-arm64.sh
+          bash miniforge.sh -b -p $HOME/miniforge
+          export PATH="$HOME/miniforge/bin:$PATH"
+          conda init bash
+          source ~/.bashrc
+          conda create -y -n test-env python=3.9
+          conda activate test-env
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pytest
           pip install .
+
       - name: Test with pytest 
         run: |
           pytest -v
