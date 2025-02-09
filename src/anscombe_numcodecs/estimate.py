@@ -38,6 +38,7 @@ def compute_sensitivity(movie: np.array, count_weight_gamma: float = 0.2) -> dic
         movie.ndim == 3
     ), f"A three dimensional (Height, Width, Time) grayscale movie is expected, got {movie.ndim}"
 
+    # assume that negative values are due to noise
     movie = np.maximum(0, movie.astype(np.int32, copy=False))
     intensity = (movie[:-1, :, :] + movie[1:, :, :] + 1) // 2
     difference = movie[:-1, :, :].astype(np.float32) - movie[1:, :, :]
