@@ -64,7 +64,7 @@ class AnscombeCodec(Codec):
         This should pre-computed or measured directly on the instrument.
     """
 
-    codec_id = "anscombe-dj001"
+    codec_id = "anscombe-v1"
 
     def __init__(
         self,
