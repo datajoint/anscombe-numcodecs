@@ -1,5 +1,5 @@
 """
-Numcodecs Codec implementation for Poisson noise calibration
+Numcodecs Codec implementation for Anscombe Transform for photon-limited data.
 """
 
 import numpy as np
@@ -64,7 +64,7 @@ class AnscombeCodec(Codec):
         This should pre-computed or measured directly on the instrument.
     """
 
-    codec_id = "poisson"
+    codec_id = "anscombe-v1"
 
     def __init__(
         self,

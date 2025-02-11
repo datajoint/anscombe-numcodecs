@@ -24,7 +24,7 @@ def test_data(dtype="int16"):
     return [test2d, test2d_long]
 
 def test_poisson_encode_decode(test_data):
-    poisson_codec = AnscombeCodec(
+    codec = AnscombeCodec(
         zero_level=0,
         photon_sensitivity=sensitivity,
         encoded_dtype='uint8', 
@@ -32,10 +32,12 @@ def test_poisson_encode_decode(test_data):
     )
     
     for example_data in test_data:
-        encoded = poisson_codec.encode(example_data)
-        decoded = poisson_codec.decode(encoded)
+        encoded = codec.encode(example_data)
+        decoded = codec.decode(encoded)
+        recoded = codec.decode(codec.encode(decoded))
         assert np.abs(decoded - example_data).max() < sensitivity / 2
-
+        assert (decoded == recoded).all()
+         
 if __name__ == '__main__':
     list_data = test_data("int16")
     test_poisson_encode_decode(list_data)
